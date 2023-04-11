@@ -127,73 +127,88 @@ public class Calculator
     public static string calculate(string[] input)
     {
         string[] pdmas = "^ / * + -".Split();
+        bool flag = false;
+        while (flag==false)
+        {
+            int i = 1;
+            //power calculation
+            for (i = 1; i < input.Length; i++)
+            {
+                if (input[i] == pdmas[0] && i < input.Length)
+                {
+                    double num1 = Convert.ToDouble(input[i - 1]);
+                    double num2 = Convert.ToDouble(input[i + 1]);
+                    input[i] = Convert.ToString(Math.Pow(num1, num2));
+                    input[i - 1] = "$";
+                    input[i + 1] = "$";
+                    input = input.Where(val => val != "$").ToArray();
+                }
+            }
+            //divide calculation
+            for (i = 1; i < input.Length; i++)
+            {
+                if (input[i] == pdmas[1] && i < input.Length)
+                {
+                    double num1 = Convert.ToDouble(input[i - 1]);
+                    double num2 = Convert.ToDouble(input[i + 1]);
+                    input[i] = Convert.ToString(num1 / num2);
+                    input[i - 1] = "$";
+                    input[i + 1] = "$";
+                    input = input.Where(val => val != "$").ToArray();
+                }
+            }
+            //multiplication calculation
+            for (i = 1; i < input.Length; i++)
+            {
+                if (input[i] == pdmas[2] && i < input.Length)
+                {
+                    double num1 = Convert.ToDouble(input[i - 1]);
+                    double num2 = Convert.ToDouble(input[i + 1]);
+                    input[i] = Convert.ToString(num1 * num2);
+                    input[i - 1] = "$";
+                    input[i + 1] = "$";
+                    input = input.Where(val => val != "$").ToArray();
+                }
+            }
+            //addition calculation
+            for (i = 1; i < input.Length; i++)
+            {
+                if (input[i] == pdmas[3] && i < input.Length)
+                {
+                    double num1 = Convert.ToDouble(input[i - 1]);
+                    double num2 = Convert.ToDouble(input[i + 1]);
+                    input[i] = Convert.ToString(num1 + num2);
+                    input[i - 1] = "$";
+                    input[i + 1] = "$";
+                    input = input.Where(val => val != "$").ToArray();
+                }
+            }
+            //subtraction calculation
+            for (i = 1; i < input.Length; i++)
+            {
+                if (input[i] == pdmas[4] && i < input.Length)
+                {
+                    double num1 = Convert.ToDouble(input[i - 1]);
+                    double num2 = Convert.ToDouble(input[i + 1]);
+                    input[i] = Convert.ToString(num1 - num2);
+                    input[i - 1] = "$";
+                    input[i + 1] = "$";
+                    input = input.Where(val => val != "$").ToArray();
+                }
+            }
+            //check if full string has been calculated or not
+            for(int c = 0; c < input.Length; c++)
+            {
+                if (Regex.IsMatch(input[c],@"[/^/*+-]"))
+                {
+                    flag = false;
+                    break;
+                }
+                flag = true;
+            }
+        }
 
-        int i = 1;
-        //power calculation
-        for (i = 1; i < input.Length; i++)
-        {
-            if (input[i] == pdmas[0] && i < input.Length)
-            {
-                double num1 = Convert.ToDouble(input[i - 1]);
-                double num2 = Convert.ToDouble(input[i + 1]);
-                input[i] = Convert.ToString(Math.Pow(num1, num2));
-                input[i - 1] = "$";
-                input[i + 1] = "$";
-                input=input.Where(val => val != "$").ToArray();
-            }
-        }
-        //divide calculation
-        for (i = 1; i < input.Length; i++)
-        {
-            if (input[i] == pdmas[1] && i < input.Length)
-            {
-                double num1 = Convert.ToDouble(input[i - 1]);
-                double num2 = Convert.ToDouble(input[i + 1]);
-                input[i] = Convert.ToString(num1/num2);
-                input[i - 1] = "$";
-                input[i + 1] = "$";
-                input = input.Where(val => val != "$").ToArray();
-            }
-        }
-        //multiplication calculation
-        for (i = 1; i < input.Length; i++)
-        {
-            if (input[i] == pdmas[2] && i < input.Length)
-            {
-                double num1 = Convert.ToDouble(input[i - 1]);
-                double num2 = Convert.ToDouble(input[i + 1]);
-                input[i] = Convert.ToString(num1 * num2);
-                input[i - 1] = "$";
-                input[i + 1] = "$";
-                input = input.Where(val => val != "$").ToArray();
-            }
-        }
-        //addition calculation
-        for (i = 1; i < input.Length; i++)
-        {
-            if (input[i] == pdmas[3] && i < input.Length)
-            {
-                double num1 = Convert.ToDouble(input[i - 1]);
-                double num2 = Convert.ToDouble(input[i + 1]);
-                input[i] = Convert.ToString(num1 + num2);
-                input[i - 1] = "$";
-                input[i + 1] = "$";
-                input = input.Where(val => val != "$").ToArray();
-            }
-        }
-        //subtraction calculation
-        for (i = 1; i < input.Length; i++)
-        {
-            if (input[i] == pdmas[4] && i < input.Length)
-            {
-                double num1 = Convert.ToDouble(input[i - 1]);
-                double num2 = Convert.ToDouble(input[i + 1]);
-                input[i] = Convert.ToString(num1 - num2);
-                input[i - 1] = "$";
-                input[i + 1] = "$";
-                input = input.Where(val => val != "$").ToArray();
-            }
-        }
+        //returning result as string
         string result = "";
         for(int j = 0; j < input.Length; j++)
         {
